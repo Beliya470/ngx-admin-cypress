@@ -1,62 +1,51 @@
 describe("Page Object Design Pattern Test Suite", () => {
     beforeEach(() => {
+      // Increase the default command timeout for this test
+      Cypress.config("defaultCommandTimeout", 10000)
       cy.openHomePage()
     })
   
     it("Verify navigation to all app sections", () => {
       cy.origin("https://demo.akveo.com", () => {
+        // Increase the default command timeout for this test
+        Cypress.config("defaultCommandTimeout", 10000)
+  
         // Define all the navigation functions directly inside the callback
         function selectGroupMenuItem(groupName) {
-          // Based on the screenshot, we can see the sidebar menu is visible
-          // Let's try different selectors to find and click the menu item
-          cy.get("body").then(($body) => {
-            // Log what we see for debugging
-            cy.log("Looking for menu item:", groupName)
-  
-            if ($body.find(".menu-sidebar span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in .menu-sidebar")
-              cy.get(".menu-sidebar").contains("span", groupName).click({ force: true })
-            } else if ($body.find("nb-sidebar span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in nb-sidebar")
-              cy.get("nb-sidebar").contains("span", groupName).click({ force: true })
-            } else if ($body.find("nb-menu span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in nb-menu")
-              cy.get("nb-menu").contains("span", groupName).click({ force: true })
-            } else {
-              cy.log("Using generic selector")
-              cy.contains(groupName).click({ force: true })
-            }
-          })
+          // Based on the menu HTML structure, find and click the menu item
+          cy.get(".menu-items", { timeout: 10000 }).contains(".menu-title", groupName).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToFormLayoutsPage() {
           selectGroupMenuItem("Forms")
-          cy.contains("Form Layouts").click({ force: true })
+          // Find the Form Layouts menu item by its title attribute
+          cy.get('a[title="Form Layouts"]', { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToDatepickerPage() {
           selectGroupMenuItem("Forms")
-          cy.contains("Datepicker").click({ force: true })
+          // Find the Datepicker menu item by its title attribute
+          cy.get('a[title="Datepicker"]', { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToSmartTablePage() {
           selectGroupMenuItem("Tables & Data")
-          cy.contains("Smart Table").click({ force: true })
+          cy.contains("Smart Table", { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToToasterPage() {
           selectGroupMenuItem("Modal & Overlays")
-          cy.contains("Toastr").click({ force: true })
+          cy.contains("Toastr", { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToTooltipPage() {
           selectGroupMenuItem("Modal & Overlays")
-          cy.contains("Tooltip").click({ force: true })
+          cy.contains("Tooltip", { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
@@ -71,53 +60,40 @@ describe("Page Object Design Pattern Test Suite", () => {
   
     it("Submit inline and basic forms, pick dates, and interact with smart table", () => {
       cy.origin("https://demo.akveo.com", () => {
+        // Increase the default command timeout for this test
+        Cypress.config("defaultCommandTimeout", 10000)
+  
         // Define all the necessary functions directly inside the callback
         // Navigation functions
         function selectGroupMenuItem(groupName) {
-          // Based on the screenshot, we can see the sidebar menu is visible
-          // Let's try different selectors to find and click the menu item
-          cy.get("body").then(($body) => {
-            // Log what we see for debugging
-            cy.log("Looking for menu item:", groupName)
-  
-            if ($body.find(".menu-sidebar span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in .menu-sidebar")
-              cy.get(".menu-sidebar").contains("span", groupName).click({ force: true })
-            } else if ($body.find("nb-sidebar span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in nb-sidebar")
-              cy.get("nb-sidebar").contains("span", groupName).click({ force: true })
-            } else if ($body.find("nb-menu span").filter((_, el) => el.textContent.includes(groupName)).length > 0) {
-              cy.log("Found in nb-menu")
-              cy.get("nb-menu").contains("span", groupName).click({ force: true })
-            } else {
-              cy.log("Using generic selector")
-              cy.contains(groupName).click({ force: true })
-            }
-          })
+          // Based on the menu HTML structure, find and click the menu item
+          cy.get(".menu-items", { timeout: 10000 }).contains(".menu-title", groupName).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToFormLayoutsPage() {
           selectGroupMenuItem("Forms")
-          cy.contains("Form Layouts").click({ force: true })
+          // Find the Form Layouts menu item by its title attribute
+          cy.get('a[title="Form Layouts"]', { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToDatepickerPage() {
           selectGroupMenuItem("Forms")
-          cy.contains("Datepicker").click({ force: true })
+          // Find the Datepicker menu item by its title attribute
+          cy.get('a[title="Datepicker"]', { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         function navigateToSmartTablePage() {
           selectGroupMenuItem("Tables & Data")
-          cy.contains("Smart Table").click({ force: true })
+          cy.contains("Smart Table", { timeout: 10000 }).click({ force: true })
           cy.wait(1000)
         }
   
         // Form functions
         function submitInlineFormWithNameAndEmail(name, email) {
-          cy.contains("nb-card", "Inline form").then((card) => {
+          cy.contains("nb-card", "Inline form", { timeout: 10000 }).then((card) => {
             // Find the form element within the card
             cy.wrap(card)
               .find("form")
@@ -132,7 +108,7 @@ describe("Page Object Design Pattern Test Suite", () => {
         }
   
         function submitBasicFormWithEmailAndPassword(email, password) {
-          cy.contains("nb-card", "Basic form").then((card) => {
+          cy.contains("nb-card", "Basic form", { timeout: 10000 }).then((card) => {
             // Find the form element within the card
             cy.wrap(card)
               .find("form")
@@ -148,7 +124,7 @@ describe("Page Object Design Pattern Test Suite", () => {
   
         // Datepicker functions
         function selectCommonDatepickerDateFromToday(daysFromToday) {
-          cy.contains("nb-card", "Common Datepicker")
+          cy.contains("nb-card", "Common Datepicker", { timeout: 10000 })
             .find("input")
             .then((input) => {
               cy.wrap(input).click({ force: true })
@@ -162,13 +138,15 @@ describe("Page Object Design Pattern Test Suite", () => {
                 year: "numeric",
               })
   
-              cy.get("nb-calendar-day-picker").contains("nb-calendar-day-cell", day).click({ force: true })
+              cy.get("nb-calendar-day-picker", { timeout: 10000 })
+                .contains("nb-calendar-day-cell", day)
+                .click({ force: true })
               cy.wrap(input).should("have.value", dateAssert)
             })
         }
   
         function selectDatepickerWithRangeFromToday(start, end) {
-          cy.contains("nb-card", "Datepicker With Range")
+          cy.contains("nb-card", "Datepicker With Range", { timeout: 10000 })
             .find("input")
             .then((input) => {
               cy.wrap(input).click({ force: true })
@@ -184,8 +162,12 @@ describe("Page Object Design Pattern Test Suite", () => {
   
               const expectedRange = `${startString} - ${endString}`
   
-              cy.get(".day-cell:not(.bounding-month)").contains(startDate.getDate().toString()).click({ force: true })
-              cy.get(".day-cell:not(.bounding-month)").contains(endDate.getDate().toString()).click({ force: true })
+              cy.get(".day-cell:not(.bounding-month)", { timeout: 10000 })
+                .contains(startDate.getDate().toString())
+                .click({ force: true })
+              cy.get(".day-cell:not(.bounding-month)", { timeout: 10000 })
+                .contains(endDate.getDate().toString())
+                .click({ force: true })
   
               cy.wrap(input).should("have.value", expectedRange)
             })
@@ -193,8 +175,8 @@ describe("Page Object Design Pattern Test Suite", () => {
   
         // Smart table functions
         function addNewRecordWithFirstAndLastName(firstName, lastName) {
-          cy.get("thead").find(".nb-plus").click({ force: true })
-          cy.get("thead tr")
+          cy.get("thead", { timeout: 10000 }).find(".nb-plus").click({ force: true })
+          cy.get("thead tr", { timeout: 10000 })
             .eq(2)
             .then((row) => {
               cy.wrap(row).find('[placeholder="First Name"]').type(firstName, { force: true })
@@ -202,7 +184,7 @@ describe("Page Object Design Pattern Test Suite", () => {
               cy.wrap(row).find(".nb-checkmark").click({ force: true })
             })
   
-          cy.get("tbody tr")
+          cy.get("tbody tr", { timeout: 10000 })
             .first()
             .find("td")
             .then((cells) => {
@@ -212,7 +194,7 @@ describe("Page Object Design Pattern Test Suite", () => {
         }
   
         function updateAgeByFirstName(name, age) {
-          cy.get("tbody tr").each((row) => {
+          cy.get("tbody tr", { timeout: 10000 }).each((row) => {
             cy.wrap(row)
               .find("td")
               .eq(2)
@@ -228,7 +210,7 @@ describe("Page Object Design Pattern Test Suite", () => {
         }
   
         function deleteRowByIndex(index) {
-          cy.get("tbody tr").eq(index).find(".nb-trash").click({ force: true })
+          cy.get("tbody tr", { timeout: 10000 }).eq(index).find(".nb-trash").click({ force: true })
           cy.on("window:confirm", () => true)
         }
   
